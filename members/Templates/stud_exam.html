@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Questions</title>
+  <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<!-- <body onload="init(); getExamQuestions(); getQuestions();"> -->
+<body>
+  <div>
+    <form action="" method="post">
+    {% csrf_token %}
+    <input type="hidden" value="{{eid}}" name="eid" />
+    {% for q in ques %}
+    {{q.que}}: Max {{q.marks}}
+<textarea name="ans"
+
+cols="100"
+
+rows="10"
+
+placeholder="Your answer">
+
+</textarea>
+
+<br />
+
+{% endfor %}
+
+<input type="submit" value="submit" />
+
+</form>
+
+</div>
+
+  <!-- <h2>Enter New Question</h2>
+
+  <label for="queText">Question:</label><br/>
+  <textarea id="queText" placeholder="Enter question here" rows="4" cols="60"></textarea><br/><br/>
+
+  <label for="marks">Marks:</label><br/>
+  <input type="number" id="marks" placeholder="Enter marks" /><br/><br/>
+
+  <label for="examSelect">Select Exam:</label><br/>
+  <select id="examSelect">
+    <option value="">-- Select Exam --</option>
+    
+  </select><br/><br/>
+
+  <button onclick="saveQuestions()">Save Question</button>
+
+  <hr/>
+
+  <h3>Saved Questions</h3>
+  <div id="questionList">
+    
+  </div> -->
+
+</body>
+</html>

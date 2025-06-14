@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <script src="{% static 'js/main.js' %}" defer></script>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Document</title>
+</head>
+<body onload="init(); getExams()">
+
+ <div id="menu">
+  <a href="{% url 'fac_dashboard' %}">Home</a>
+  </div>
+  <div>
+  <a href="{% url 'logout' %}">Logout</a>
+  </div>
+ <div>
+ <div>
+  <input type="text" id="exam" placeholder="Title"><br/>
+  <input type="date" id="startdate" /><br/>
+  <input type="date" id="enddate" /><br/>
+  <input type="text" id="facname" value="{{fac.name}}" readonly /><br/>
+  <input type="text" id="facid" value="{{fac.id}}" readonly /><br/>
+  <button onclick="saveExams()">Save</button>
+ </div>
+ <div id="idExams">
+
+ </div>
+ </div>
+</body>
+</html>

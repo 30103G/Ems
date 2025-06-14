@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- <meta name="csrf-token" content="{{ csrf_token }}"> -->
+  <title>Student</title>
+  <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body>
+  <h2>Exams</h2>
+  <!-- <h3>Add Student</h3> -->
+   <div>
+    {% for exam in exams %}
+    <a href="{% url 'stud_exam' exam.id %}">{{exam.exam}}</a>
+    {% endfor %}
+
+    <h1>Results</h1>
+    {% for res in results %}
+    <a href="{% url 'stud_res' res.id %}">{{res.exam}}</a>
+    {% endfor %}
+   </div>
+<h1>{{msg}}</h1>
+   <form action="" method="post">
+    {% csrf_token %}
+<input type="text" name="sid" placeholder="studentId" /><br/>
+<input type="text" name="unm" placeholder="User" /><br/>
+<input type="password" name="pwd" placeholder="Password" /><br/>
+<!-- <input type="text" id="prog" placeholder="Program" /><br/> -->
+<!-- <button onclick="addStudent()">Add</button> -->
+ <input type="submit" value="GET Exam" />
+   </form>
+
+
+  <!-- <h3>Student List</h3>
+  <div id="studentList"></div> -->
+</body>
+</html>
