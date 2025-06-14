@@ -14,8 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -85,13 +84,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ems_postgre',
         'USER': 'ems_postgre_user',
-        'PASSWORD': 'OkJlnGafpgJNwbjIp5Ijo6T6aLbrDfht',
-        'HOST': 'dpg-d16jn2h5pdvs73fdafdg-a',
+        'PASSWORD': 'RSSAxhOBqe5MzJ57tCnpn5uAPItxvBoH',
+        'HOST': 'dpg-d16qd87diees73dfqmpg-a.oregon-postgres.render.com',
         'PORT': '5432',
         
     }
 }
-
+# postgresql://ems_postgre_el4x_user:RSSAxhOBqe5MzJ57tCnpn5uAPItxvBoH@dpg-d16qd87diees73dfqmpg-a.oregon-postgres.render.com/ems_postgre_el4x
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -139,5 +138,5 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
