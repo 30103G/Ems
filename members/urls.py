@@ -10,7 +10,7 @@ router.register(r'assessments', AssesmentViewSet)
 router.register(r'AssessmentAnwser',AssementAnswerViewSet)
 
 urlpatterns=[
- path('',home,name='home'),
+ path('/',home,name='home'),
  path('api/', include(router.urls)),
 
  path('faculty/', faculty, name='faculty'),
