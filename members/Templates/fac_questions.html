@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Questions</title>
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .question-list {
+            margin-top: 30px;
+        }
+        .question-item {
+            background: #e9ecef;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add New Question</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="que">Question:</label>
+        <textarea name="que" id="que" maxlength="200" required></textarea>
+
+        <label for="marks">Marks:</label>
+        <input type="number" name="marks" id="marks" required>
+
+        <label for="exam">Select Exam:</label>
+        <select name="exam" id="exam" required>
+            {% for exam in exam %}
+                <option value="{{ exam.id }}">{{exam.exam}}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Add Question</button>
+    </form>
+
+    <div class="question-list">
+        <h3>Existing Questions</h3>
+        {% for question in questions %}
+            <div class="question-item">
+                <strong>Q:</strong> {{ question.que }}<br>
+                <strong>Marks:</strong> {{ question.marks }}<br>
+                <strong>Exam:</strong> {{ question.exam.exam }}
+            </div>
+        {% empty %}
+            <p>No questions added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

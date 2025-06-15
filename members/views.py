@@ -36,7 +36,7 @@ def student(request):
    request.session['id']=std.first().id
    request.session['name']=std.first().name
    request.session['unm']=unm
-   request.session['type']='prog'
+   request.session['type']='student'
    return redirect('std_dashboard')
   else:
    print('Wrong Username')
@@ -58,7 +58,7 @@ def logout(request):
   return redirect('/')
 
 from .models import *
-from . serialisers import ExamSerializer,StudentSerializer,QuestionSerializer
+from . serialisers import *
 from rest_framework import viewsets # type: ignore
 
 class ExamViewSet(viewsets.ModelViewSet):
@@ -80,36 +80,59 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
+class AssesmentViewSet(viewsets.ModelViewSet):
+  queryset = Assesment.objects.all()
+  serializer_class = AssesmentSerializer
+
+class AssementAnswerViewSet(viewsets.ModelViewSet):
+  queryset = AssementAnswer.objects.all()
+  serializer_class = AssementAnswerSerializer
+
 def fac_questions(request):
+    if request.method == 'POST':
+      que = request.POST.get('que')
+      marks = request.POST.get('marks')
+      exam_id = request.POST.get('exam')
+      if que and marks and exam_id:
+        exam = Exam.objects.get(id=exam_id)
+        Question.objects.create(
+            que=que,
+            marks=marks,
+            exam=exam
+        )
+        return redirect('fac_questions')
     exams = Exam.objects.all()
-    return render(request, 'fac_questions.html', {'exams': exams})
+    questions= Question.objects.all()
+    
+    return render(request, 'fac_questions.html', {'exam': exams,
+                                                  'questions':questions})
 
 def std_dashboard(request):
-    cont = {'msg':'','exams':[], 'results':[]}
-    unm=''
-    pwd=''
-    if request.method=='POST':
-      unm = request.POST.get('unm')
-      pwd = request.POST.get('pwd')
-      sid=request.POST.get('sid')
-      request.session['sid']=sid
-    stud = Student.objects.filter(unm=unm,pwd=pwd)
-    if stud:
-      assessment= Assesment.objects.filter(student_id=sid, is_attempt=False)
-      for i in assessment:
-        exams= Exam.objects.filter(id=i.exam_id)
-        if exams:
-          cont['exams'].extend(exams)
+  cont = {'msg':'','exams':[], 'results':[]}
+  unm=''
+  pwd=''
+  if request.method=='POST':
+    unm = request.POST.get('unm')
+    pwd = request.POST.get('pwd')
+    sid=request.POST.get('sid')
+    request.session['sid']=sid
+  stud = Student.objects.filter(unm=unm,pwd=pwd)
+  if stud:
+    assessment= Assesment.objects.filter(student_id=sid, is_attempt=False)
+    for i in assessment:
+      exams= Exam.objects.filter(id=i.id)
+      if exams:
+        cont['exams'].extend(exams)
 
-      assessment= Assesment.objects.filter(student_id=sid, is_attempt=True)
-      for i in assessment:
-        exams= Exam.objects.filter(id=i.exam_id)
-        if exams:
-          cont['results'].extend(exams)
+    assessment= Assesment.objects.filter(student_id=sid, is_attempt=True)
+    for i in assessment:
+      exams= Exam.objects.filter(id=i.id)
+      if exams:
+        cont['results'].extend(exams)
   
-        else:
-          cont['msg']='please Check all values'
-    return render(request, 'students.html', cont)
+      else:
+        cont['msg']='please Check all values'
+  return render(request, 'students.html', cont)
 
 def stud_exam(request, eid=1):
   cont={'eid':eid}
@@ -127,7 +150,7 @@ def stud_exam(request, eid=1):
     assesment = Assesment.objects.filter(exam_id=eid,student_id=request.session.get('sid')).first()
     assesment.is_attempt=True
     assesment.save()
-    return redirect('sd')
+    return redirect('std_dashboard')
   ques = Question.objects.filter(exam_id=eid)
   cont['ques']=ques
   return render(request, 'stud_exam.html', cont)
